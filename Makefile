@@ -1,0 +1,3 @@
+
+lint:
+	ruff format toradh
