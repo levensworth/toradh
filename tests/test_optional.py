@@ -46,3 +46,17 @@ def test_match() -> None:
             raise AssertionError()
         case Some(val):
             assert val == 1
+
+
+@pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
+def test_match_with_none() -> None:
+    option = Some(None)
+
+    match option:
+        case Nothing():
+            raise AssertionError()
+        case Some(None):
+            pass
+        case Some(int()):
+            raise ValueError()
+    
