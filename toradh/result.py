@@ -6,8 +6,6 @@ import typeguard
 
 # source: https://jellis18.github.io/post/2021-12-13-python-exceptions-rust-go/
 
-Result = Union["Ok[T]", "Err[E]"]
-
 T = TypeVar("T")
 V = TypeVar("V")
 
@@ -132,6 +130,9 @@ class Err(Generic[E]):
         return f"Err({repr(self._err)})"
 
 
+Result = Union[Ok[T], Err[E]]
+
+
 class Option(Generic[T]):
     __match_args__ = ("_value",)
 
@@ -194,11 +195,16 @@ class Option(Generic[T]):
 class Some(Option[T], Generic[T]):
     __match_args__ = ("_value",)
 
+    def __init__(self, value: T):
+        self._flag = True
+        super().__init__(value)
+
 
 class Nothing(Option[None]):
     __match_args__ = ("_value",)
 
     def __init__(self):
+        self._flag = True
         super().__init__(None)
 
     def is_some(self) -> bool:
