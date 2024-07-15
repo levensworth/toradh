@@ -3,9 +3,10 @@
 # Otherwise, Ruff is run and its changes are committed back to the incoming pull request.
 
 name: publish
-on: 
-  pull_request:
-    branches: [ "master" ]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
