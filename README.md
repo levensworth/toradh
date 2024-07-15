@@ -1,4 +1,5 @@
 # TORADH
+[![codecov](https://codecov.io/github/levensworth/toradh/graph/badge.svg?token=hsojulL0hJ)](https://codecov.io/github/levensworth/toradh)
 
 Minimalistic library intended to bring better flow control to Python.
 
