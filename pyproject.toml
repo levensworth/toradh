@@ -9,7 +9,6 @@ repository = "https://github.com/levensworth/toradh"
 homepage = "https://github.com/levensworth/toradh"
 
 classifiers = [
-    "Topic :: Software Development :: Control flow",
     "Topic :: Software Development :: Error Handling",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
