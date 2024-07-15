@@ -61,7 +61,7 @@ def concrete_error_handling():
         case KeyError()
             print(f'Name already exists')
             #include possible measure to recover from this error
-            ...
+            # ...
 
 def no_handling():
     # in this case, we do not want to handle the possible errors
@@ -79,7 +79,7 @@ if __name__ == '__main__:
 ```
 
 
-### Example of why to use Toradh
+## why to use Toradh
 First let's go over some simple examples:
 
 Let's go over an example not using the framework
