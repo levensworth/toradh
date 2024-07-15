@@ -59,4 +59,3 @@ def test_match_with_none() -> None:
             pass
         case Some(int()):
             raise ValueError()
-    

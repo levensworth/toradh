@@ -54,5 +54,3 @@ def test_match_over_err(mock_err: Result[Movie, Exception]) -> None:
                 mock_err.unwrap()
             case Err(KeyError()):
                 raise AssertionError("match a KeyError when ValueError was expected")
-
-                

@@ -40,6 +40,11 @@ class Ok(Generic[T]):
     __match_args__ = ("_value",)
 
     def __init__(self, value: T):
+        """Creates a OK object which represent a successful value.
+
+        Args:
+            value (T): instance to wrap
+        """
         self._value = value
 
     def __eq__(self, other: Any) -> bool:
@@ -48,15 +53,43 @@ class Ok(Generic[T]):
         return False
 
     def kind(self) -> T:
+        """Returns the instance with the objective to be use for structural pattern matching.
+
+        Returns:
+            T: wrapped instance
+        """
         return self._value
 
     def unwrap(self) -> T:
+        """Returns the wrapped instance.
+
+        Returns:
+            T: instances wrapped by the Ok class.
+        """
         return self._value
 
     def unwrap_or(self, default: T) -> T:
+        """Returns a default object in case the result is of the Err type.
+
+        Args:
+            default (T): value to return in case of Err.
+
+        Returns:
+            T: either the default value or the unwrapped value.
+        """
         return self.unwrap()
 
     def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+        """Given a Err result, call the op callable which should
+        help resolve the error.
+
+        Args:
+            op (Callable[[E], T]): callable which should return a instance of T
+            given an instance of an error.
+
+        Returns:
+            T:
+        """
         return self.unwrap()
 
     def is_ok(self) -> bool:
@@ -69,6 +102,16 @@ class Ok(Generic[T]):
         op(self.unwrap())
 
     async def async_if_ok(self, op: Callable[[T], Any]) -> None:
+        """Given a Err result, call the op callable which should
+        help resolve the error. Specifically designed for async callables.
+
+        Args:
+            op (Callable[[E], T]): callable which should return a instance of T
+            given an instance of an error.
+
+        Returns:
+            T:
+        """
         res = op(self.unwrap())
         if inspect.isawaitable(res):
             await res
@@ -85,6 +128,12 @@ class Err(Generic[E]):
     __match_args__ = ("_err",)
 
     def __init__(self, err: E):
+        """Representation of an wrapped error. Meant to be use for control flow
+        management.
+
+        Args:
+            err (E): error instance to wrap
+        """
         self._err = err
 
     def __eq__(self, other: Any) -> bool:
