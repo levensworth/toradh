@@ -1,8 +1,8 @@
 
 lint:
-	ruff format toradh
-	ruff format tests
-	ruff format examples
+	poetry run ruff format toradh
+	poetry run ruff format tests
+	poetry run ruff format examples
 
 check-style:
-	ruff check
+	poetry run ruff check
