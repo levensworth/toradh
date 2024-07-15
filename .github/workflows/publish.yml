@@ -50,14 +50,3 @@ jobs:
         run: poetry config pypi-token.pypi {{ secrets.PYPI_TOKEN }}
       - name: publish
         run: poetry publish --build
-      - name: If needed, commit black changes to the pull request
-        if: failure()
-        run: |
-          make lint
-          git config --global user.name 'auto-formatting'
-          git config --global user.email 'formatting-bot@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git fetch
-          git checkout $GITHUB_HEAD_REF
-          git commit -am "fixup: Run formatting script"
-          git push
