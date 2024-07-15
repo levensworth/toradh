@@ -1,5 +1,6 @@
 from toradh.result import Nothing, Option, Some
 
+
 def find_user_by_id(user_id: int) -> Option[dict]:
     """
     Simulates fetching a user from a database by their ID.
@@ -20,6 +21,7 @@ def find_user_by_id(user_id: int) -> Option[dict]:
     # Fetch the user from the database
     return Option.of(users.get(user_id))
 
+
 def display_user_info(user_id: int) -> None:
     """
     Displays user information based on their ID.
@@ -28,13 +30,14 @@ def display_user_info(user_id: int) -> None:
         user_id (int): The ID of the user to display.
     """
     user = find_user_by_id(user_id)
-    
+
     match user:
-        case Some(data): 
+        case Some(data):
             print(f"User found: Name - {data['name']}, Age - {data['age']}")
-        
+
         case Nothing():
             print("User not found")
+
 
 # Example usage
 display_user_info(1)  # User found: Name - Alice, Age - 30
