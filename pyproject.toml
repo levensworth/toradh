@@ -1,9 +1,13 @@
 [tool.poetry]
 name = "toradh"
 version = "0.1.0"
-description = ""
+description = "Minimalistic library intended to bring better flow control to Python."
 authors = ["Santiago Bassani <santiago.bassani96@gmail.com>"]
 readme = "README.md"
+license = "MIT"
+repository = "https://github.com/levensworth/toradh"
+homepage = "https://github.com/levensworth/toradh"
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
