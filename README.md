@@ -1,5 +1,9 @@
 # TORADH
 [![codecov](https://codecov.io/github/levensworth/toradh/graph/badge.svg?token=hsojulL0hJ)](https://codecov.io/github/levensworth/toradh)
+[![pypi](https://img.shields.io/pypi/v/toradh.svg)](https://pypi.python.org/pypi/toradh/)
+[![version](https://img.shields.io/pypi/pyversions/toradh.svg)](https://pypi.python.org/pypi/toradh/)
+[![license](https://img.shields.io/pypi/l/toradh.svg)](https://en.wikipedia.org/wiki/GNU_General_Public_License)
+
 
 Minimalistic library intended to bring better flow control to Python.
 

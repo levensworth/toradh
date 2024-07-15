@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "toradh"
-version = "0.1.0"
+version = "0.1.1"
 description = "Minimalistic library intended to bring better flow control to Python."
 authors = ["Santiago Bassani <santiago.bassani96@gmail.com>"]
 readme = "README.md"
