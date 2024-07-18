@@ -34,36 +34,6 @@ def mock_err() -> Err[ValueError]:
     return Err(ValueError())
 
 
-@pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
-def test_match_over_ok(mock_ok: Result[Movie, Exception]) -> None:
-    if sys.version_info < (3, 10):
-        pytest.skip("requires Python 3.10 or higher")
-
-    unwrapped = None
-    match mock_ok:
-        case Ok(Movie()):
-            unwrapped = mock_ok.unwrap()
-        case Err():
-            raise AssertionError("match an error when an Ok value was expected")
-
-    assert unwrapped == mock_ok.unwrap()
-
-
-@pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
-def test_match_over_err(mock_err: Result[Movie, Exception]) -> None:
-    if sys.version_info < (3, 10):
-        pytest.skip("requires Python 3.10 or higher")
-
-    with pytest.raises(ValueError):
-        match mock_err:
-            case Ok(Movie()):
-                raise AssertionError("match an Ok when an Err value was expected")
-            case Err(ValueError()):
-                mock_err.unwrap()
-            case Err(KeyError()):
-                raise AssertionError("match a KeyError when ValueError was expected")
-
-
 def test_map_err(mock_err: Result[Movie, Exception]) -> None:
     if is_err(mock_err):
         new_res = mock_err.map_to_err(KeyError())
@@ -93,3 +63,37 @@ def test_equals(
 
 def test_kind(mock_ok: Result[Movie, Exception]) -> None:
     assert mock_ok.kind() == mock_ok.unwrap()
+
+
+if sys.version_info < (3, 10):
+    pytest.skip("requires Python 3.10 or higher", allow_module_level=True)
+
+
+@pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
+def test_match_over_ok(mock_ok: Result[Movie, Exception]) -> None:
+    if sys.version_info < (3, 10):
+        pytest.skip("requires Python 3.10 or higher")
+
+    unwrapped = None
+    match mock_ok:
+        case Ok(Movie()):
+            unwrapped = mock_ok.unwrap()
+        case Err():
+            raise AssertionError("match an error when an Ok value was expected")
+
+    assert unwrapped == mock_ok.unwrap()
+
+
+@pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
+def test_match_over_err(mock_err: Result[Movie, Exception]) -> None:
+    if sys.version_info < (3, 10):
+        pytest.skip("requires Python 3.10 or higher")
+
+    with pytest.raises(ValueError):
+        match mock_err:
+            case Ok(Movie()):
+                raise AssertionError("match an Ok when an Err value was expected")
+            case Err(ValueError()):
+                mock_err.unwrap()
+            case Err(KeyError()):
+                raise AssertionError("match a KeyError when ValueError was expected")

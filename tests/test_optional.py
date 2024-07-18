@@ -37,6 +37,10 @@ def test_of_something() -> None:
     assert option.is_some()
 
 
+if sys.version_info < (3, 10):
+    pytest.skip("requires Python 3.10 or higher", allow_module_level=True)
+
+
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
 def test_match() -> None:
     if sys.version_info < (3, 10):
