@@ -36,6 +36,9 @@ def mock_err() -> Err[ValueError]:
 
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
 def test_match_over_ok(mock_ok: Result[Movie, Exception]) -> None:
+    if sys.version_info < (3, 10):
+        pytest.skip("requires Python 3.10 or higher")
+
     unwrapped = None
     match mock_ok:
         case Ok(Movie()):
@@ -48,6 +51,9 @@ def test_match_over_ok(mock_ok: Result[Movie, Exception]) -> None:
 
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
 def test_match_over_err(mock_err: Result[Movie, Exception]) -> None:
+    if sys.version_info < (3, 10):
+        pytest.skip("requires Python 3.10 or higher")
+
     with pytest.raises(ValueError):
         match mock_err:
             case Ok(Movie()):
