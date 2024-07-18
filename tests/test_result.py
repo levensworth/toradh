@@ -76,11 +76,14 @@ def test_is_ok(mock_ok: Result[Movie, Exception]) -> None:
         raise AssertionError(f"is_ok return False for {mock_ok}")
 
 
-def test_equals(mock_err: Result[Movie, Exception], mock_ok: Result[Movie, Exception]) -> None:
+def test_equals(
+    mock_err: Result[Movie, Exception], mock_ok: Result[Movie, Exception]
+) -> None:
     assert mock_err != mock_ok
     assert mock_ok.is_ok()
-    new_movie_ok =  Ok(mock_ok.unwrap())
+    new_movie_ok = Ok(mock_ok.unwrap())
     assert new_movie_ok == mock_ok
+
 
 def test_kind(mock_ok: Result[Movie, Exception]) -> None:
     assert mock_ok.kind() == mock_ok.unwrap()

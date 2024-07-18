@@ -9,6 +9,10 @@ def test_docs(fpath):
     check_md_file(fpath=fpath)
 
 
-@pytest.mark.parametrize("fpath", [pathlib.Path("readme.md")], ids=str)
+@pytest.mark.parametrize(
+    "fpath",
+    [pathlib.Path(__file__).parent.parent.joinpath(pathlib.Path("readme.md"))],
+    ids=str,
+)
 def test_readme(fpath):
     check_md_file(fpath=fpath)
