@@ -62,7 +62,7 @@ def concrete_error_handling():
             print(f'successfully persisted under {res.unwrap()}')
         case ValueError():
             print(f'There was a problem with the name\'s length')
-        case KeyError()
+        case KeyError():
             print(f'Name already exists')
             #include possible measure to recover from this error
             # ...
@@ -73,7 +73,7 @@ def no_handling():
     res = create_user('janet')
     print(f'successfully persisted under {res.unwrap()}')
 
-if __name__ == '__main__:
+if __name__ == '__main__':
     basic_handling()
 
     concrete_error_handling()

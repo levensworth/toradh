@@ -1,6 +1,6 @@
-import sys
 import pytest
-from toradh.result import Option, Nothing, Some
+
+from toradh import Option, Nothing
 
 
 @pytest.fixture
@@ -35,27 +35,3 @@ def test_of_something() -> None:
     option = Option.of(1)
     assert isinstance(option, Option)
     assert option.is_some()
-
-
-@pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
-def test_match() -> None:
-    option = Option.of(1)
-
-    match option:
-        case Nothing():
-            raise AssertionError()
-        case Some(val):
-            assert val == 1
-
-
-@pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
-def test_match_with_none() -> None:
-    option = Some(None)
-
-    match option:
-        case Nothing():
-            raise AssertionError()
-        case Some(None):
-            pass
-        case Some(int()):
-            raise ValueError()

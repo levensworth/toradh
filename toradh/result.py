@@ -1,6 +1,7 @@
 import inspect
 import typing
-from typing import Any, Callable, Generic, NoReturn, TypeVar, Union
+from typing import Any, Callable, Generic, Literal, NoReturn, TypeVar, Union
+from typing_extensions import TypeIs
 
 import typeguard
 
@@ -92,13 +93,18 @@ class Ok(Generic[T]):
         """
         return self.unwrap()
 
-    def is_ok(self) -> bool:
+    def is_ok(self) -> Literal[True]:
         return True
 
-    def is_error(self) -> bool:
+    def is_error(self) -> Literal[False]:
         return False
 
     def if_ok(self, op: Callable[[T], Any]) -> None:
+        """invoke the given operation in case of Ok() or else do nothing.
+
+        Args:
+            op (Callable[[T], Any]): function to invoke with the content of Ok()
+        """
         op(self.unwrap())
 
     async def async_if_ok(self, op: Callable[[T], Any]) -> None:
@@ -142,9 +148,22 @@ class Err(Generic[E]):
         return False
 
     def kind(self) -> E:
+        """Returns the instance with the objective to be use for structural pattern matching.
+
+        Returns:
+            E: Instance of the error withhold in the Err object.
+        """
         return self._err
 
     def unwrap(self) -> NoReturn:
+        """Unwraps the contained exception
+
+        Raises:
+            self._err: raises the exception.
+
+        Returns:
+            NoReturn
+        """
         raise self._err
 
     @typeguard.typechecked
@@ -155,16 +174,26 @@ class Err(Generic[E]):
     def unwrap_or_else(self, op: Callable[[E], T]) -> T:
         return op(self._err)
 
-    def is_ok(self) -> bool:
+    def is_ok(self) -> Literal[False]:
         return False
 
-    def is_error(self) -> bool:
+    def is_error(self, _) -> Literal[True]:
         return True
 
     def if_ok(self, op: Callable[[T], Any]) -> None:
+        """invoke the given operation in case of Ok() or else do nothing.
+
+        Args:
+            op (Callable[[T], Any]): function to invoke with the content of Ok()
+        """
         return None
 
     async def async_if_ok(self, op: Callable[[T], Any]) -> None:
+        """invoke the given an async operation in case of Ok() or else do nothing.
+
+        Args:
+            op (Callable[[T], Any]): async function to invoke with the content of Ok()
+        """
         return None
 
     @typeguard.typechecked
@@ -173,6 +202,14 @@ class Err(Generic[E]):
 
     @typeguard.typechecked
     def map_to_err(self, err: R) -> "Err[R]":
+        """Give a new exception to return as a new instance of Err
+
+        Args:
+            err (R): Exception to create Err[R]
+
+        Returns:
+            Err[R]: New Err[R] instance object.
+        """
         return Err(err)
 
     def __repr__(self) -> str:
@@ -182,96 +219,46 @@ class Err(Generic[E]):
 Result = Union[Ok[T], Err[E]]
 
 
-class Option(Generic[T]):
-    __match_args__ = ("_value",)
-
-    def __init__(self, value: Union[T, None]):
-        if getattr(self, "_flag", None) is None:
-            raise ValueError(
-                'you need to call either "empty()" or "of()" methods to create an instance'
-            )
-        self._value = value
-
-    @classmethod
-    def empty(cls) -> "Nothing":
-        setattr(cls, "_flag", True)
-        return Nothing()
-
-    @typing.overload
-    @classmethod
-    def of(cls, value: T) -> "Some[T]": ...
-
-    @typing.overload
-    @classmethod
-    def of(cls, value: None) -> "Nothing": ...
-
-    @classmethod
-    def of(cls, value: typing.Optional[T]) -> Union["Some[T]", "Nothing"]:
-        setattr(cls, "_flag", True)
-        if value is None:
-            return Nothing()
-        return Some(value)
-
-    def is_some(self) -> bool:
-        return self._value is not None
-
-    def is_none(self) -> bool:
-        return self._value is None
-
-    @typeguard.typechecked
-    def unwrap(self) -> T:
-        """Returns the value wrapped in the Option
-        Returns:
-            T: value wrapped.
-        """
-        assert self._value is not None
-        return self._value
-
-    @typeguard.typechecked
-    def unwrap_or(self, default: T) -> T:
-        assert self._value is not None
-        return self._value
-
-    @typeguard.typechecked
-    def map(self, func: typing.Callable[[T], R]) -> "Option[R]":
-        assert self._value
-        return Option.of(func(self._value))
-
-    def __repr__(self) -> str:
-        return f"Some({self._value})"
+# Helper functions
 
 
-class Some(Option[T], Generic[T]):
-    __match_args__ = ("_value",)
+def is_ok(val: Result) -> TypeIs[Ok]:
+    """Helper function which indicates if the value is of type Ok or Err
 
-    def __init__(self, value: T):
-        self._flag = True
-        super().__init__(value)
+    Args:
+        val (Result): Result instance to determine.
 
+    Example:
+        >>> x = Err(ValueError())
+        >>> if not is_ok(x):
+        >>>     # this works because the type checker knows this of type Err
+        >>>     x.map_to_err(KeyError())
 
-class Nothing(Option[None]):
-    __match_args__ = ("_value",)
-
-    def __init__(self):
-        self._flag = True
-        super().__init__(None)
-
-    def is_some(self) -> bool:
+    Returns:
+        TypeIs[Ok]: Returns True if val is Ok else False
+    """
+    if isinstance(val, Ok):
+        return True
+    else:
         return False
 
-    def is_none(self) -> bool:
+
+def is_err(val: Result) -> TypeIs[Err]:
+    """Helper function which indicates if the value is of type Err or Ok
+
+    Args:
+        val (Result): Result instance to determine.
+
+    Example:
+        >>> x = Err(ValueError())
+        >>> if is_err(x):
+        >>>     # this works because the type checker knows this of type Err
+        >>>     x.map_to_err(KeyError())
+
+    Returns:
+        TypeIs[Err]: Returns True if val is Err else False
+    """
+    if isinstance(val, Err):
         return True
-
-    def unwrap(self) -> None:
-        return None
-
-    @typeguard.typechecked
-    def unwrap_or(self, default: T) -> T:
-        return default
-
-    @typeguard.typechecked
-    def map(self, func: typing.Callable[[T], R]) -> Option[R]:
-        return typing.cast(Option, Nothing())
-
-    def __repr__(self) -> str:
-        return "Empty"
+    else:
+        return False
