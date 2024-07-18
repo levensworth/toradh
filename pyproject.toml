@@ -24,6 +24,7 @@ ruff = "^0.5.1"
 pytest = "^8.2.2"
 mockito = "^1.5.0"
 pytest-cov = "^5.0.0"
+mktestdocs = "^0.2.2"
 
 [build-system]
 requires = ["poetry-core"]

@@ -123,6 +123,19 @@ files = [
 ]
 
 [[package]]
+name = "mktestdocs"
+version = "0.2.2"
+description = ""
+optional = false
+python-versions = "*"
+files = [
+    {file = "mktestdocs-0.2.2-py2.py3-none-any.whl", hash = "sha256:b0eea09c14cb9df7bf112f848c3d5069713519eddb3b0b2223211699246c3f1d"},
+]
+
+[package.extras]
+test = ["pytest (>=4.0.2)"]
+
+[[package]]
 name = "mockito"
 version = "1.5.0"
 description = "Spying framework"
@@ -343,4 +356,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "bcea86393a82b1a029e5229c498cebab5f99b9b7cd45ea36038514756c00c8ad"
+content-hash = "95578d5a7ec81ae6ed1495f952c035f44bcb0fed296a27b36ac0c217babd6982"

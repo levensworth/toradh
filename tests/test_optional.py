@@ -1,6 +1,6 @@
 import sys
 import pytest
-from toradh.result import Option, Nothing, Some
+from toradh import Option, Nothing, Some
 
 
 @pytest.fixture
