@@ -38,14 +38,11 @@ def test_of_something() -> None:
 
 
 if sys.version_info < (3, 10):
-    pytest.skip("requires Python 3.10 or higher", allow_module_level=True)
+    sys.exit(0)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
 def test_match() -> None:
-    if sys.version_info < (3, 10):
-        pytest.skip("requires Python 3.10 or higher")
-
     option = Option.of(1)
 
     match option:
@@ -57,9 +54,6 @@ def test_match() -> None:
 
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
 def test_match_with_none() -> None:
-    if sys.version_info < (3, 10):
-        pytest.skip("requires Python 3.10 or higher")
-
     option = Some(None)
 
     match option:

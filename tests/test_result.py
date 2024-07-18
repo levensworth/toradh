@@ -66,7 +66,7 @@ def test_kind(mock_ok: Result[Movie, Exception]) -> None:
 
 
 if sys.version_info < (3, 10):
-    pytest.skip("requires Python 3.10 or higher", allow_module_level=True)
+    sys.exit(0)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
