@@ -11,7 +11,7 @@ def test_docs(fpath):
 
 @pytest.mark.parametrize(
     "fpath",
-    [pathlib.Path(".").glob("readme.md")],
+    pathlib.Path(".").glob("readme.md"),
     ids=str,
 )
 def test_readme(fpath):
