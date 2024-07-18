@@ -65,10 +65,6 @@ def test_kind(mock_ok: Result[Movie, Exception]) -> None:
     assert mock_ok.kind() == mock_ok.unwrap()
 
 
-if sys.version_info.major == 3 and sys.version_info.minor < 10:
-    sys.exit(0)
-
-
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
 def test_match_over_ok(mock_ok: Result[Movie, Exception]) -> None:
     if sys.version_info < (3, 10):

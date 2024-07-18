@@ -37,10 +37,6 @@ def test_of_something() -> None:
     assert option.is_some()
 
 
-if sys.version_info < (3, 10):
-    sys.exit(0)
-
-
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="requires Python 3.10 or higher")
 def test_match() -> None:
     option = Option.of(1)

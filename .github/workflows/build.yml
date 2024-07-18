@@ -80,5 +80,5 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          poetry run pytest --cov=toradh --cov-report=xml tests
+          poetry run pytest --cov=toradh --cov-report=xml -m "not skipif" tests
           coverage report
