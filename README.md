@@ -20,7 +20,7 @@ pip install toradh
 ```
 
 
-## How to:
+## Usage:
 We support structural pattern matching with the `match` operator as well as build in methods for control flow management.
 
 ```python
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 ```
 
 
-## why to use Toradh
+## why use Toradh?
 First let's go over some simple examples:
 
 Let's go over an example not using the framework
