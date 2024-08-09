@@ -35,3 +35,14 @@ def test_of_something() -> None:
     option = Option.of(1)
     assert isinstance(option, Option)
     assert option.is_some()
+
+
+def test_dataclass_optional() -> None:
+    from dataclasses import dataclass
+
+    @dataclass
+    class User:
+        name: Option[str]
+
+    user = User(name=Option.of("a"))
+    assert user.name.is_some()
