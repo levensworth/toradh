@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 import logging
 from typing import Protocol
 
-from toradh.result import Option, Result
+from toradh import Option, Result
 
 
 @dataclass
@@ -36,7 +36,7 @@ def add_to_cart_aggregate(
     cart_id: int, item: str, service: CartService, repository: CartRepository
 ) -> None:
     cart = repository.get_by_id(cart_id)
-    if cart.is_none():
+    if cart.is_nothing():
         raise CartNotFoundError()
 
     service_res = service.add_item(cart, item=item)

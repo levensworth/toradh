@@ -147,7 +147,7 @@ class Nothing(Option[None]):
         return True
 
     def unwrap(self) -> None:
-        return None
+        raise ValueError("Trying to unwrap Nothing() is not allowed")
 
     @typeguard.typechecked
     def unwrap_or(self, default: T) -> T:

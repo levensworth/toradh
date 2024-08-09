@@ -17,23 +17,93 @@ R = TypeVar("R", bound=BaseException)
 class ResultProto(typing.Protocol[T, E]):
     def __eq__(self, other: Any) -> bool: ...
 
-    def kind(self) -> T: ...
+    def kind(self) -> T:
+        """Returns the instance with the objective to be use for structural pattern matching.
 
-    def unwrap(self) -> T: ...
+        Returns:
+            T: wrapped instance
+        """
+        ...
 
-    def unwrap_or(self, default: T) -> T: ...
+    def unwrap(self) -> T:
+        """Returns the wrapped instance.
 
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T: ...
+        Returns:
+            T: instances wrapped by the Ok class.
+        """
+        ...
 
-    def is_ok(self) -> bool: ...
+    def unwrap_or(self, default: T) -> T:
+        """Returns a default object in case the result is of the Err type.
 
-    def is_error(self) -> bool: ...
+        Args:
+            default (T): value to return in case of Err.
 
-    def if_ok(self, op: Callable[[T], Any]) -> None: ...
+        Returns:
+            T: either the default value or the unwrapped value.
+        """
+        ...
 
-    async def async_if_ok(self, op: Callable[[T], Any]) -> None: ...
+    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+        """Given a Err result, call the op callable which should
+        help resolve the error.
 
-    def map_to_err(self, result: "Err[R]") -> "Err[R]": ...
+        Args:
+            op (Callable[[E], T]): callable which should return a instance of T
+            given an instance of an error.
+
+        Returns:
+            T:
+        """
+        ...
+
+    def is_ok(self) -> bool:
+        """Helper function to check if the instance if of type Ok
+
+        Returns:
+            bool: True if Ok() instance, else False
+        """
+        ...
+
+    def is_error(self) -> bool:
+        """Helper function to check if the instance if of type Err
+
+        Returns:
+            bool: True if Err() instance, else False
+        """
+        ...
+
+    def if_ok(self, op: Callable[[T], Any]) -> None:
+        """invoke the given operation in case of Ok() or else do nothing.
+
+        Args:
+            op (Callable[[T], Any]): function to invoke with the content of Ok()
+        """
+        ...
+
+    async def async_if_ok(self, op: Callable[[T], Any]) -> None:
+        """Given a Err result, call the op callable which should
+        help resolve the error. Specifically designed for async callables.
+
+        Args:
+            op (Callable[[E], T]): callable which should return a instance of T
+            given an instance of an error.
+
+        Returns:
+            T:
+        """
+        ...
+
+    def map_to_err(self, result: "Err[R]") -> "Err[R]":
+        """Give a new exception to return as a new instance of Err
+
+        Args:
+            err (R): Exception to create Err[R]
+
+        Returns:
+            Err[R]: New Err[R] instance object.
+        """
+        ...
 
 
 class Ok(Generic[T]):

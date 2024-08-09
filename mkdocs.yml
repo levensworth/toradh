@@ -1,0 +1,30 @@
+site_name: Toradh
+nav:
+  - Home: index.md
+  - why use it: why_use_result.md
+  - Internal API:
+    - Result: 
+      - Protocol: api/result_intro.md
+      - Ok: api/ok_class_def.md
+      - Err: api/err_class_def.md
+    - Option: 
+      - Option: api/option_class_def.md
+      - Some: api/some_class_def.md
+      - Nothing: api/nothing_class_def.md
+
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - mkautodoc
+  - admonition
+  - codehilite
+
+extra_css:
+    - css/custom.css
