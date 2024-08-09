@@ -44,6 +44,7 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
+      - run: poetry build
       - name: gh-deploy
         run: poetry run mkdocs gh-deploy --force
   build:
