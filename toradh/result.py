@@ -247,7 +247,7 @@ class Err(Generic[E]):
     def is_ok(self) -> Literal[False]:
         return False
 
-    def is_error(self, _) -> Literal[True]:
+    def is_error(self) -> Literal[True]:
         return True
 
     def if_ok(self, op: Callable[[T], Any]) -> None:

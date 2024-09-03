@@ -11,7 +11,7 @@ V = TypeVar("V")
 class Option(Generic[T]):
     __match_args__ = ("_value",)
 
-    def __init__(self, value: Union[T, None]):
+    def __init__(self, value: Union[T, None]) -> None:
         """Base Wrapper object to represent an optional value.
         This can be either Some(T) or Nothing().
 
@@ -122,7 +122,7 @@ class Option(Generic[T]):
 class Some(Option[T], Generic[T]):
     __match_args__ = ("_value",)
 
-    def __init__(self, value: T):
+    def __init__(self, value: T) -> None:
         """Representation of a desired value within a control flow.
 
         Args:
@@ -135,7 +135,7 @@ class Some(Option[T], Generic[T]):
 class Nothing(Option[None]):
     __match_args__ = ("_value",)
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Representation of the absence of a desired value."""
         self._flag = True
         super().__init__(None)
@@ -146,7 +146,7 @@ class Nothing(Option[None]):
     def is_none(self) -> bool:
         return True
 
-    def unwrap(self) -> None:
+    def unwrap(self) -> typing.NoReturn:
         raise ValueError("Trying to unwrap Nothing() is not allowed")
 
     @typeguard.typechecked
@@ -159,3 +159,6 @@ class Nothing(Option[None]):
 
     def __repr__(self) -> str:
         return "Empty"
+
+
+Optional = typing.Union[Some[T], Nothing]
