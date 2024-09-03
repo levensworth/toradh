@@ -8,6 +8,11 @@ license = "MIT"
 repository = "https://github.com/levensworth/toradh"
 homepage = "https://github.com/levensworth/toradh"
 
+packages = [
+  {include = "toradh"},
+  {include = "toradh/py.typed"},
+]
+
 keywords = ["toradh", "rust", "result", "optional", "control-flow"]
 
 [tool.poetry.dependencies]
