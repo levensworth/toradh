@@ -2,7 +2,8 @@ from dataclasses import dataclass, field
 import logging
 from typing import Protocol
 
-from toradh import Option, Result
+from toradh import Result
+from toradh.option import Optional
 
 
 @dataclass
@@ -27,7 +28,7 @@ class CartService(Protocol):
 
 
 class CartRepository(Protocol):
-    def get_by_id(self, id: int) -> Option[Cart]: ...
+    def get_by_id(self, id: int) -> Optional[Cart]: ...
 
     def update_cart_items(self, cart: Cart) -> Result[bool, CartNotFoundError]: ...
 

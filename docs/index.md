@@ -22,13 +22,15 @@ The use for the `Option` primitive is to offer a better alternative to the defau
 Here you have some examples:
 
 ```python
-from toradh import Option
+from toradh import Optional, Option
 from dataclasses import dataclass
+from contextlib import suppress
+
 
 @dataclass
 class User:
     id: int
-    surname: Option[str]
+    surname: Optional[str]
 
 user = User(id=1, surname=Option.of('doe'))
 user.surname.is_some() # returns True
@@ -37,7 +39,8 @@ user.surname.unwrap_or('default')# 'doe'
 
 empty_user = User(id=1, surname=Option.of(None))
 empty_user.surname.is_some() # returns False
-empty_user.surname.unwrap() # raise ValueError
+with suppress(ValueError):
+    empty_user.surname.unwrap() # raise ValueError
 empty_user.surname.unwrap_or('default')# 'default'
 
 ```
@@ -63,7 +66,11 @@ def make_payment(to: str, amount: int) -> Result[bool, KeyError | ValueError]:
             KeyError: Means the address does not exists
             ValueError: Means the amount is not a positive integer.
     """
+    return Ok(True)
+
+def handle_successful_payment(*args) -> None:
     ...
+
 
 
 payment_result = make_payment(to='0x001', amount=-100)

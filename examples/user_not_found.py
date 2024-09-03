@@ -1,7 +1,7 @@
-from toradh.result import Nothing, Option, Some
+from toradh import Optional, Option, Nothing, Some
 
 
-def find_user_by_id(user_id: int) -> Option[dict]:
+def find_user_by_id(user_id: int) -> Optional[dict]:
     """
     Simulates fetching a user from a database by their ID.
 
@@ -31,12 +31,19 @@ def display_user_info(user_id: int) -> None:
     """
     user = find_user_by_id(user_id)
 
-    match user:
-        case Some(data):
-            print(f"User found: Name - {data['name']}, Age - {data['age']}")
+    # for python > 3.10
+    # match user:
+    #     case Some(data):
+    #         print(f"User found: Name - {data['name']}, Age - {data['age']}")
 
-        case Nothing():
-            print("User not found")
+    #     case Nothing():
+    #         print("User not found")
+
+    if user.is_some():
+        data = user.unwrap()
+        print(f"User found: Name - {data['name']}, Age - {data['age']}")
+    else:
+        print("User not found")
 
 
 # Example usage

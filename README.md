@@ -109,14 +109,14 @@ def main():
 
 and how it would look like if using it
 ```python
-from toradh import Option, Nothing, Some
+from toradh import Optional, Option, Nothing, Some
 
 DB = {
     1: 'john', 
     2: 'jane',
 }
 
-def get_user_by_id_new(user_id: int) -> Option[str]:
+def get_user_by_id_new(user_id: int) -> Optional[str]:
     if user_id not in DB:
         return Nothing()
     
@@ -177,7 +177,7 @@ pleasure of correctly handling this behavior on the invoker.
 As opposed to this implementation:
 
 ```python
-from toradh import Option, Nothing, Some
+from toradh import Optional, Option, Nothing, Some
 
 DB = {
     1: 'john', 
@@ -185,7 +185,7 @@ DB = {
     3: None
 }
 
-def get_user_by_id_new(user_id: int) -> Option[str | None]:
+def get_user_by_id_new(user_id: int) -> Optional[str | None]:
     if user_id not in DB:
         return Nothing()
     

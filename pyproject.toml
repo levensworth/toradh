@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "toradh"
-version = "0.2.0"
+version = "0.2.1"
 description = "Minimalistic library intended to bring better flow control to Python."
 authors = ["Santiago Bassani <santiago.bassani96@gmail.com>"]
 readme = "README.md"
@@ -35,3 +35,55 @@ mkautodoc = "^0.2.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+
+[tool.mypy]
+# Include common directories
+files = ["toradh", "examples"]
+
+# Disallow dynamic typing by default (stricter checks)
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+# Report errors for missing imports
+ignore_missing_imports = false
+
+# Warn about unused "type: ignore" comments
+warn_unused_ignores = true
+
+# Check for untyped calls
+disallow_untyped_calls = true
+
+# Check for untyped decorator functions
+disallow_untyped_decorators = true
+
+# Ensure strict optional checking
+strict_optional = true
+
+# Type-check variable assignments
+disallow_untyped_globals = true
+
+# Warn about unreachable code
+warn_unreachable = true
+
+# Show the error code of each error message
+show_error_codes = true
+
+# Set the target Python version (e.g., 3.10)
+python_version = "3.10"
+
+# Report any non-local imports that don't use a relative path
+no_implicit_reexport = true
+
+# Do not allow any function to have both an argument without a default and a keyword-only argument after it
+allow_redefinition = false
+
+# Do not follow imports to .pyi type stubs (may be useful if the stub files are incomplete or inaccurate)
+# follow_imports = "silent"
+
+# Set the cache directory (optional)
+cache_dir = ".mypy_cache"
+
+# Exclude certain files or directories from type checking (e.g., migrations in Django projects)
+exclude = ["migrations", "docs", "build"]
