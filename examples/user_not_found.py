@@ -1,4 +1,4 @@
-from toradh import Optional, Option, Nothing, Some
+from toradh import Optional, Option
 
 
 def find_user_by_id(user_id: int) -> Optional[dict]:
@@ -46,6 +46,7 @@ def display_user_info(user_id: int) -> None:
         print("User not found")
 
 
-# Example usage
-display_user_info(1)  # User found: Name - Alice, Age - 30
-display_user_info(4)  # User not found
+if __name__ == "__main__":
+    # Example usage
+    display_user_info(1)  # User found: Name - Alice, Age - 30
+    display_user_info(4)  # User not found
