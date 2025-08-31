@@ -531,60 +531,9 @@
 <p>One of the main benefits of <code>toradh</code> is the introduction of <code>Result</code> which is simply the
 union of 2 types: <code>Ok[T]</code> and <code>Err[E]</code>.</p>
 <p>both of this objects follow the blue prints of the below protocol.</p>
-<div class="autodoc">
-<div class="autodoc-signature"><em>class </em><code>toradh.result.<strong>ResultProto</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">*args</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">**kwargs</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"></div>
-<div class="autodoc-members">
-<div class="autodoc-signature"><em>async </em><code><strong>async_if_ok</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">op</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Given a Err result, call the op callable which should
-help resolve the error. Specifically designed for async callables.</p>
-<p>Args:
-    op (Callable[[E], T]): callable which should return a instance of T
-    given an instance of an error.</p>
-<p>Returns:
-    T:</p></div>
-<div class="autodoc-signature"><code><strong>if_ok</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">op</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>invoke the given operation in case of Ok() or else do nothing.</p>
-<p>Args:
-    op (Callable[[T], Any]): function to invoke with the content of Ok()</p></div>
-<div class="autodoc-signature"><code><strong>is_error</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Helper function to check if the instance if of type Err</p>
-<p>Returns:
-    bool: True if Err() instance, else False</p></div>
-<div class="autodoc-signature"><code><strong>is_ok</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Helper function to check if the instance if of type Ok</p>
-<p>Returns:
-    bool: True if Ok() instance, else False</p></div>
-<div class="autodoc-signature"><code><strong>kind</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Returns the instance with the objective to be use for structural pattern matching.</p>
-<p>Returns:
-    T: wrapped instance</p></div>
-<div class="autodoc-signature"><code><strong>map_to_err</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">result</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Give a new exception to return as a new instance of Err</p>
-<p>Args:
-    err (R): Exception to create Err[R]</p>
-<p>Returns:
-    Err[R]: New Err[R] instance object.</p></div>
-<div class="autodoc-signature"><code><strong>unwrap</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Returns the wrapped instance.</p>
-<p>Returns:
-    T: instances wrapped by the Ok class.</p></div>
-<div class="autodoc-signature"><code><strong>unwrap_or</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">default</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Returns a default object in case the result is of the Err type.</p>
-<p>Args:
-    default (T): value to return in case of Err.</p>
-<p>Returns:
-    T: either the default value or the unwrapped value.</p></div>
-<div class="autodoc-signature"><code><strong>unwrap_or_else</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">op</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Given a Err result, call the op callable which should
-help resolve the error.</p>
-<p>Args:
-    op (Callable[[E], T]): callable which should return a instance of T
-    given an instance of an error.</p>
-<p>Returns:
-    T:</p></div>
-</div>
-</div>
+<p>::: toradh.result.ResultProto
+    :docstring:
+    :members:</p>
 
 
 

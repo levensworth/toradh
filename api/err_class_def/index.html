@@ -531,46 +531,10 @@
 <p>Representation of an incorrect value derived from the flow of the program. Meaning
 this value holds the reference to the problem which derived in an incorrect state
 which was <em>expected</em> by the creators of the code.</p>
-<div class="autodoc">
-<div class="autodoc-signature"><em>class </em><code>toradh.<strong>Err</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">err</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"></div>
-<div class="autodoc-members">
-<div class="autodoc-signature"><em>async </em><code><strong>async_if_ok</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">op</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>invoke the given an async operation in case of Ok() or else do nothing.</p>
-<p>Args:
-    op (Callable[[T], Any]): async function to invoke with the content of Ok()</p></div>
-<div class="autodoc-signature"><code><strong>if_ok</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">op</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>invoke the given operation in case of Ok() or else do nothing.</p>
-<p>Args:
-    op (Callable[[T], Any]): function to invoke with the content of Ok()</p></div>
-<div class="autodoc-signature"><code><strong>is_error</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">_</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"></div>
-<div class="autodoc-signature"><code><strong>is_ok</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"></div>
-<div class="autodoc-signature"><code><strong>kind</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Returns the instance with the objective to be use for structural pattern matching.</p>
-<p>Returns:
-    E: Instance of the error withhold in the Err object.</p></div>
-<div class="autodoc-signature"><code><strong>map_to_err</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">err</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Give a new exception to return as a new instance of Err</p>
-<p>Args:
-    err (R): Exception to create Err[R]</p>
-<p>Returns:
-    Err[R]: New Err[R] instance object.</p></div>
-<div class="autodoc-signature"><code><strong>or_else_throw</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">result</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"></div>
-<div class="autodoc-signature"><code><strong>unwrap</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"><p>Unwraps the contained exception</p>
-<p>Raises:
-    self._err: raises the exception.</p>
-<p>Returns:
-    NoReturn</p></div>
-<div class="autodoc-signature"><code><strong>unwrap_or</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">default</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"></div>
-<div class="autodoc-signature"><code><strong>unwrap_or_else</strong></code><span class="autodoc-punctuation">(</span><em class="autodoc-param">self</em><span class="autodoc-punctuation">, </span><em class="autodoc-param">op</em><span class="autodoc-punctuation">)</span></div>
-<div class="autodoc-docstring"></div>
-</div>
-</div>
+<h1 id="err"><code>Err</code></h1>
+<p>::: toradh.Err
+    :docstring:
+    :members:</p>
 
 
 

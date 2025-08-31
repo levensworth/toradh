@@ -655,23 +655,26 @@
 <p>The use for the <code>Option</code> primitive is to offer a better alternative to the default
 <code>typing.Optional</code> which translates into <code>T | None</code> (where <code>T</code> represents any value).</p>
 <p>Here you have some examples:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">toradh</span> <span class="kn">import</span> <span class="n">Option</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">toradh</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Option</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nd">@dataclass</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">class</span> <span class="nc">User</span><span class="p">:</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">surname</span><span class="p">:</span> <span class="n">Option</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">surname</span><span class="o">=</span><span class="n">Option</span><span class="o">.</span><span class="n">of</span><span class="p">(</span><span class="s1">&#39;doe&#39;</span><span class="p">))</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">is_some</span><span class="p">()</span> <span class="c1"># returns True</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span> <span class="c1"># &#39;doe&#39;</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap_or</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span><span class="c1"># &#39;doe&#39;</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">empty_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">surname</span><span class="o">=</span><span class="n">Option</span><span class="o">.</span><span class="n">of</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="n">empty_user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">is_some</span><span class="p">()</span> <span class="c1"># returns False</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">empty_user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span> <span class="c1"># raise ValueError</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">empty_user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap_or</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span><span class="c1"># &#39;default&#39;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">class</span> <span class="nc">User</span><span class="p">:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">surname</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">surname</span><span class="o">=</span><span class="n">Option</span><span class="o">.</span><span class="n">of</span><span class="p">(</span><span class="s1">&#39;doe&#39;</span><span class="p">))</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">is_some</span><span class="p">()</span> <span class="c1"># returns True</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span> <span class="c1"># &#39;doe&#39;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap_or</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span><span class="c1"># &#39;doe&#39;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">empty_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">surname</span><span class="o">=</span><span class="n">Option</span><span class="o">.</span><span class="n">of</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">empty_user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">is_some</span><span class="p">()</span> <span class="c1"># returns False</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    <span class="n">empty_user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span> <span class="c1"># raise ValueError</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="n">empty_user</span><span class="o">.</span><span class="n">surname</span><span class="o">.</span><span class="n">unwrap_or</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span><span class="c1"># &#39;default&#39;</span>
 </code></pre></div>
 <h3 id="result"><code>Result</code>:</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">toradh</span> <span class="kn">import</span> <span class="n">Result</span><span class="p">,</span> <span class="n">Ok</span><span class="p">,</span> <span class="n">Err</span>
@@ -692,23 +695,27 @@
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="sd">            KeyError: Means the address does not exists</span>
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="sd">            ValueError: Means the amount is not a positive integer.</span>
 <a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="o">...</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="n">payment_result</span> <span class="o">=</span> <span class="n">make_payment</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="s1">&#39;0x001&#39;</span><span class="p">,</span> <span class="n">amount</span><span class="o">=-</span><span class="mi">100</span><span class="p">)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="k">def</span> <span class="nf">handle_successful_payment</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="o">...</span>
 <a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="k">match</span> <span class="n">payment_result</span><span class="o">.</span><span class="n">kind</span><span class="p">():</span>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    <span class="k">case</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>        <span class="c1"># then it was a successful invocation</span>
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>        <span class="n">handle_successful_payment</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    <span class="k">case</span> <span class="kc">False</span><span class="p">:</span>
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        <span class="n">handle_failed_payment</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    <span class="k">case</span> <span class="ne">KeyError</span><span class="p">():</span>
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>        <span class="c1"># the address was wrong</span>
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>        <span class="n">alert_wrong_address</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>    <span class="k">case</span> <span class="ne">ValueError</span><span class="p">():</span>
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>        <span class="c1"># the amount was incorrect</span>
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        <span class="n">alert_illegal_amount</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="n">payment_result</span> <span class="o">=</span> <span class="n">make_payment</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="s1">&#39;0x001&#39;</span><span class="p">,</span> <span class="n">amount</span><span class="o">=-</span><span class="mi">100</span><span class="p">)</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="k">match</span> <span class="n">payment_result</span><span class="o">.</span><span class="n">kind</span><span class="p">():</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    <span class="k">case</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>        <span class="c1"># then it was a successful invocation</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>        <span class="n">handle_successful_payment</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>    <span class="k">case</span> <span class="kc">False</span><span class="p">:</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>        <span class="n">handle_failed_payment</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>    <span class="k">case</span> <span class="ne">KeyError</span><span class="p">():</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        <span class="c1"># the address was wrong</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>        <span class="n">alert_wrong_address</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    <span class="k">case</span> <span class="ne">ValueError</span><span class="p">():</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>        <span class="c1"># the amount was incorrect</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>        <span class="n">alert_illegal_amount</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 </code></pre></div>
 
 
