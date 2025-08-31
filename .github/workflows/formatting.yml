@@ -28,23 +28,15 @@ jobs:
         run: pip install poetry
       - name: Configure Poetry to use in-project venv
         run: poetry config virtualenvs.in-project true
-      - name: Create Poetry virtual environment
-        run: poetry env use $(poetry env info -p)
 
       #----------------------------------------------
       #       load cached venv if cache exists
       #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      
       #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
       - name: check style
         run: make check-style
