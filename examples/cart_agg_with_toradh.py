@@ -40,7 +40,7 @@ def add_to_cart_aggregate(
     if cart.is_nothing():
         raise CartNotFoundError()
 
-    service_res = service.add_item(cart, item=item)
+    service_res = service.add_item(cart.unwrap(), item=item)
     match service_res.kind():
         case Cart():
             repository.update_cart_items(service_res.unwrap())

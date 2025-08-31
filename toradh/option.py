@@ -56,7 +56,7 @@ class Option(Generic[T]):
     def of(cls, value: None) -> "Nothing": ...
 
     @classmethod
-    def of(cls, value: typing.Optional[T]) -> Union["Some[T]", "Nothing"]:
+    def of(cls, value: typing.Optional[T]) -> "Optional[T]":
         """Creates a instance of either Some() or Nothing, depending if the value
         if actually None or not.
 
@@ -118,6 +118,61 @@ class Option(Generic[T]):
     def __repr__(self) -> str:
         return f"Some({self._value})"
 
+    # Pydantic v2 integration
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source_type: typing.Any, handler: typing.Any
+    ) -> typing.Any:
+        """Provide Pydantic v2 core schema for Option[T].
+
+        Validation behavior:
+        - None -> Nothing()
+        - Option[T] instance -> passthrough
+        - bare value -> validate as T and wrap in Some[T]
+
+        Serialization behavior:
+        - Nothing() -> None
+        - Some(v) -> v (serialized according to T)
+        """
+        try:
+            from pydantic_core import core_schema as cs
+        except (
+            Exception
+        ) as exc:  # pragma: no cover - only executed if pydantic isn't installed
+            raise exc
+
+        type_args = typing.get_args(source_type)
+        inner_type: typing.Any = type_args[0] if type_args else typing.Any
+        inner_schema = handler.generate_schema(inner_type)
+
+        def _wrap_validator(
+            value: typing.Any, inner: typing.Any
+        ) -> "Option[typing.Any]":
+            if isinstance(value, Option):
+                return typing.cast(Option[typing.Any], value)
+            if value is None:
+                return typing.cast(Option[typing.Any], Nothing())
+            validated = inner(value)
+            return typing.cast(Option[typing.Any], Some(validated))
+
+        def _serialize(
+            value: "Option[typing.Any]",
+            serializer: typing.Callable[[typing.Any], typing.Any],
+        ) -> typing.Any:
+            if isinstance(value, Nothing):
+                return None
+            # It's Some at this point; delegate to inner serializer
+            return serializer(typing.cast(Some[typing.Any], value).unwrap())
+
+        python_schema = cs.no_info_wrap_validator_function(
+            _wrap_validator, inner_schema
+        )
+        json_schema = cs.no_info_wrap_validator_function(_wrap_validator, inner_schema)
+        ser = cs.wrap_serializer_function_ser_schema(_serialize, schema=inner_schema)
+        return cs.json_or_python_schema(
+            json_schema=json_schema, python_schema=python_schema, serialization=ser
+        )
+
 
 class Some(Option[T], Generic[T]):
     __match_args__ = ("_value",)
@@ -130,6 +185,46 @@ class Some(Option[T], Generic[T]):
         """
         self._flag = True
         super().__init__(value)
+
+    # Pydantic v2 integration for fields typed as Some[T]
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source_type: typing.Any, handler: typing.Any
+    ) -> typing.Any:
+        try:
+            from pydantic_core import core_schema as cs
+        except Exception as exc:  # pragma: no cover
+            raise exc
+        try:
+            from pydantic_core import core_schema as cs
+        except Exception as exc:  # pragma: no cover
+            raise exc
+
+        type_args = typing.get_args(source_type)
+        inner_type: typing.Any = type_args[0] if type_args else typing.Any
+        inner_schema = handler.generate_schema(inner_type)
+
+        def _wrap_validator(value: typing.Any, inner: typing.Any) -> "Some[typing.Any]":
+            if isinstance(value, Some):
+                return typing.cast(Some[typing.Any], value)
+            # validate bare value as T then wrap
+            validated = inner(value)
+            return typing.cast(Some[typing.Any], Some(validated))
+
+        def _serialize(
+            value: "Some[typing.Any]",
+            serializer: typing.Callable[[typing.Any], typing.Any],
+        ) -> typing.Any:
+            return serializer(value.unwrap())
+
+        python_schema = cs.no_info_wrap_validator_function(
+            _wrap_validator, inner_schema
+        )
+        json_schema = cs.no_info_wrap_validator_function(_wrap_validator, inner_schema)
+        ser = cs.wrap_serializer_function_ser_schema(_serialize, schema=inner_schema)
+        return cs.json_or_python_schema(
+            json_schema=json_schema, python_schema=python_schema, serialization=ser
+        )
 
 
 class Nothing(Option[None]):
@@ -159,6 +254,34 @@ class Nothing(Option[None]):
 
     def __repr__(self) -> str:
         return "Empty"
+
+    # Pydantic v2 integration for fields typed as Nothing
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source_type: typing.Any, handler: typing.Any
+    ) -> typing.Any:
+        try:
+            from pydantic_core import core_schema as cs
+            from pydantic_core import PydanticCustomError
+        except Exception as exc:  # pragma: no cover
+            raise exc
+
+        def _plain_validator(value: typing.Any) -> "Nothing":
+            if isinstance(value, Nothing):
+                return value
+            if value is None:
+                return Nothing()
+            raise PydanticCustomError("nothing_type", "Expected None for Nothing()")
+
+        def _serialize(value: "Nothing") -> typing.Any:
+            return None
+
+        python_schema = cs.no_info_plain_validator_function(_plain_validator)
+        json_schema = cs.no_info_plain_validator_function(_plain_validator)
+        ser = cs.plain_serializer_function_ser_schema(_serialize)
+        return cs.json_or_python_schema(
+            json_schema=json_schema, python_schema=python_schema, serialization=ser
+        )
 
 
 Optional = typing.Union[Some[T], Nothing]

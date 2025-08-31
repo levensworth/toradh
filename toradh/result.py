@@ -198,6 +198,41 @@ class Ok(Generic[T]):
     def __repr__(self) -> str:
         return f"Ok({repr(self._value)})"
 
+    # Pydantic v2 integration for Ok[T]
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source_type: typing.Any, handler: typing.Any
+    ) -> typing.Any:
+        try:
+            from pydantic_core import core_schema as cs
+        except Exception as exc:  # pragma: no cover
+            raise exc
+
+        type_args = typing.get_args(source_type)
+        inner_type: typing.Any = type_args[0] if type_args else typing.Any
+        inner_schema = handler.generate_schema(inner_type)
+
+        def _wrap_validator(value: typing.Any, inner: typing.Any) -> "Ok[typing.Any]":
+            if isinstance(value, Ok):
+                return typing.cast(Ok[typing.Any], value)
+            validated = inner(value)
+            return typing.cast(Ok[typing.Any], Ok(validated))
+
+        def _serialize(
+            value: "Ok[typing.Any]",
+            serializer: typing.Callable[[typing.Any], typing.Any],
+        ) -> typing.Any:
+            return serializer(value.unwrap())
+
+        python_schema = cs.no_info_wrap_validator_function(
+            _wrap_validator, inner_schema
+        )
+        json_schema = cs.no_info_wrap_validator_function(_wrap_validator, inner_schema)
+        ser = cs.wrap_serializer_function_ser_schema(_serialize, schema=inner_schema)
+        return cs.json_or_python_schema(
+            json_schema=json_schema, python_schema=python_schema, serialization=ser
+        )
+
 
 class Err(Generic[E]):
     _err: E
@@ -284,6 +319,45 @@ class Err(Generic[E]):
 
     def __repr__(self) -> str:
         return f"Err({repr(self._err)})"
+
+    # Pydantic v2 integration for Err[E]
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source_type: typing.Any, handler: typing.Any
+    ) -> typing.Any:
+        try:
+            from pydantic_core import core_schema as cs
+            from pydantic_core import PydanticCustomError
+        except Exception as exc:  # pragma: no cover
+            raise exc
+
+        type_args = typing.get_args(source_type)
+        err_type: typing.Any = type_args[0] if type_args else BaseException
+
+        # For errors, we accept either an Err[E] instance or a BaseException instance.
+        # We cannot reliably validate exception contents; enforce instance check.
+        def _plain_validator(value: typing.Any) -> "Err[typing.Any]":
+            if isinstance(value, Err):
+                return typing.cast(Err[typing.Any], value)
+            if isinstance(value, BaseException):
+                return typing.cast(Err[typing.Any], Err(value))
+            # If type parameter is a specific exception class, allow that
+            if isinstance(value, err_type):
+                return typing.cast(Err[typing.Any], Err(value))
+            raise PydanticCustomError(
+                "err_type", "Expected Err[E] or an exception instance"
+            )
+
+        def _serialize(value: "Err[typing.Any]") -> typing.Any:
+            # Explicitly disallow serialization for Err per requirements
+            return None
+
+        python_schema = cs.no_info_plain_validator_function(_plain_validator)
+        json_schema = cs.no_info_plain_validator_function(_plain_validator)
+        ser = cs.plain_serializer_function_ser_schema(_serialize)
+        return cs.json_or_python_schema(
+            json_schema=json_schema, python_schema=python_schema, serialization=ser
+        )
 
 
 Result = Union[Ok[T], Err[E]]

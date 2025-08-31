@@ -16,8 +16,9 @@ packages = [
 keywords = ["toradh", "rust", "result", "optional", "control-flow"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.9,<4.0"
 typeguard = "^4.3.0"
+pydantic = "^2.11.7"
 
 
 [tool.poetry.group.dev.dependencies]
