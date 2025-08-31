@@ -36,6 +36,10 @@ jobs:
       #----------------------------------------------
       - name: Install Poetry
         run: pip install poetry
+      - name: Configure Poetry to use in-project venv
+        run: poetry config virtualenvs.in-project true
+      - name: Create Poetry virtual environment
+        run: poetry env use $(poetry env info -p)
 
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
