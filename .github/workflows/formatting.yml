@@ -25,39 +25,19 @@ jobs:
       #  -----  install & configure poetry  -----
       #----------------------------------------------
       - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
+        run: pip install poetry
+      - name: Configure Poetry to use in-project venv
+        run: poetry config virtualenvs.in-project true
 
       #----------------------------------------------
       #       load cached venv if cache exists
       #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      
       #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
-      - name: update requirements
-        run: |
-          poetry export --without-hashes --format=requirements.txt > requirements.txt
-          git config --global user.name 'auto-requirement'
-          git config --global user.email 'requirement-bot@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git fetch
-          git checkout $GITHUB_HEAD_REF
-          git add requirements.txt
-          git commit -am "update: update requirements.txt"
-          git push
-
       - name: check style
         run: make check-style
       - name: If needed, commit black changes to the pull request

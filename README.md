@@ -208,3 +208,41 @@ def main():
 In this example (although not really a good use of `None`) we can see that there is a clear distinction between the absence of what 
 we want and an actual product of calling the function.
 
+## Pydantic v2 compatibility
+
+You can use `Option`, `Some`, `Nothing`, `Ok`, and `Err` as field types in Pydantic v2 models. Serialization works as follows:
+
+- `Nothing()` serializes to `None`
+- `Some(value)` serializes to the inner value
+- `Ok(value)` serializes to the inner value
+- `Err(error)` serializes to `None` (no payload)
+
+Example:
+
+```python
+from pydantic import BaseModel
+from toradh import Option, Some, Nothing, Ok, Err, Result
+
+class Inner(BaseModel):
+    x: int
+
+class MyModel(BaseModel):
+    opt: Option[int]
+    ok: Ok[Inner]
+    res: Result[int, Exception]
+
+m = MyModel(opt=Some(1), ok=Ok(Inner(x=5)), res=Ok(10))
+assert m.model_dump() == {"opt": 1, "ok": {"x": 5}, "res": 10}
+
+# Accepts bare values and wraps them appropriately
+m2 = MyModel(opt=None, ok={"x": 7}, res=5)
+assert isinstance(m2.opt, Nothing)
+assert m2.model_dump() == {"opt": None, "ok": {"x": 7}, "res": 5}
+
+# Err serializes to None
+m3 = MyModel(opt=Nothing(), ok=Ok(Inner(x=1)), res=Err(RuntimeError("boom")))
+assert m3.model_dump() == {"opt": None, "ok": {"x": 1}, "res": None}
+```
+
+See `examples/pydantic_compat.py` for a runnable demonstration.
+
