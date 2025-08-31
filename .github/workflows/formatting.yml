@@ -40,24 +40,6 @@ jobs:
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-      #----------------------------------------------
-      # install dependencies if cache does not exist
-      #----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      - name: update requirements
-        run: |
-          poetry export --without-hashes --format=requirements.txt > requirements.txt
-          git config --global user.name 'auto-requirement'
-          git config --global user.email 'requirement-bot@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git fetch
-          git checkout $GITHUB_HEAD_REF
-          git add requirements.txt
-          git commit -am "update: update requirements.txt"
-          git push
-
       - name: check style
         run: make check-style
       - name: If needed, commit black changes to the pull request
